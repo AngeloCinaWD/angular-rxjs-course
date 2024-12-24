@@ -37,19 +37,37 @@ export class AboutComponent implements OnInit {
     // quello che abbiamo salvato è un blueprint di un observable di tipo number
     // possiamo infatti sottoscriverci ad esso più volte e per ogni sottoscrizione ottenere un flusso diverso di valori
 
-    interval$.subscribe((value) => console.log("stream 1 => " + value));
-    interval$.subscribe((value) => console.log("stream 2 => " + value));
+    // interval$.subscribe((value) => console.log("stream 1 => " + value));
+    // interval$.subscribe((value) => console.log("stream 2 => " + value));
 
     // la function timer di rxjs permette di dichiarare un observable che emette un valore numerico partendo con un ritardo
     // il primo parametro è dopo quanto iniziare ad emettere, il secondo ogni quanto emettere
     const timer$ = timer(3000, 1000);
 
-    timer$.subscribe((value) => console.log("stream 3 => " + value));
+    // timer$.subscribe((value) => console.log("stream 3 => " + value));
 
     // la funzione rxjs fromEvent ci restituisce un blueprint per un observable che emette un valore in risposta ad un evento, ad esempio al click in un punto dello schermo
 
     const click$ = fromEvent(document, "click");
 
     click$.subscribe((event) => console.log(event));
+
+    // un Observable è un blueprint per un flusso di dati
+    // possiamo ottenere istanze concrete di questi observables chiamando il metodo subscribe su di esso
+    // il primo parametro che passiamo a questo metodo è la callback da eseguire quando va tutto bene e possiamo gestire il value emesso
+    // il secondo parametro è la callback da eseguire in caso di errore durante il flusso di dati
+    // il terzo parametro è la callback da eseguire quando un observable termina di emettere il flusso di dati, quando è completato
+    // l'error o il completamento sono esclusivi l'uno dell'altro
+    click$.subscribe(
+      (event) => console.log(event),
+      (err) => console.log(err),
+      () => console.log("completed")
+    );
+
+    // per annullare la sottoscrizione ad un observable devo salvare in una variabile la sottoscrizione e poi la posso annullare richiamando il metodo unsuscribe()
+
+    const subscription = interval$.subscribe((number) => console.log(number));
+
+    setTimeout(() => subscription.unsubscribe(), 5000);
   }
 }
