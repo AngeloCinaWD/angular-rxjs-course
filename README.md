@@ -33,3 +33,15 @@ To run the frontend part of our code, we will use the Angular CLI:
 ## [function rxjs timer](https://rxjs.dev/api/index/function/timer)
 
 ## [function rxjs fromEvent](https://rxjs.dev/api/index/function/fromEvent)
+
+## [function rxjs noop](https://rxjs.dev/api/index/function/noop)
+
+## [function rxjs map](https://rxjs.dev/api/index/function/map)
+
+## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
+
+## [Response body js](https://developer.mozilla.org/en-US/docs/Web/API/Response/body)
+
+## [.then() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then)
+
+## [.catch() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch)
