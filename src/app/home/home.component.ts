@@ -18,41 +18,27 @@ import { createHttpObservable } from "../common/util";
   standalone: false,
 })
 export class HomeComponent implements OnInit {
-  // dichiaro 2 properties che conterranno Course in base alla categpria del corso, per mostrali nei tab del template di HomeComponent
-
-  //   beginnersCourses: Course[];
-  //   advancedCourses: Course[];
-
-  // questo modo di ricavare i dati e passrli alle properties è definibile Imperative Design che non consente una buona scalabilità del codice da scrivere se l'app diventa più complessa, si potrebbero avere situazioni di subscribe innestati e non facilmente gestibili
-  // si utilizza quindi un Reactive Design, le proprietà che dichiariamo sono degli observables che vengono passati direttamente al template, cioè noi definiamo uno stream di values ma non lo sottoscriviamo qui nel model ma direttamente nel template tramite pipe di angular async
-
   beginnersCourses$: Observable<Course[]>;
   advancedCourses$: Observable<Course[]>;
 
   constructor() {}
 
   ngOnInit() {
-    const http$: Observable<any> = createHttpObservable("/api/courses");
+    const http$: Observable<Course[]> = createHttpObservable("/api/courses");
 
     const courses$: Observable<Course[]> = http$.pipe(
-      map((body) => Object.values(body["payload"]))
+      // il tap operator rxjs può essere concatenato per produrre side effects tipo un console log o un'assegnazione di valore a qualche proprietà
+      tap(() => console.log("call executed")),
+      map((body) => body["payload"]),
+      // concateno l'operator shareReplay() in modo da evitare multiple chiamate http
+      shareReplay()
     );
 
-    // courses$.subscribe(
-    //   // per filtrare i corsi in base alla categoria ed assegnarli ad una delle proprietà posso utilizzare il .filter() method di javascript che mi restituisce un array con solo gli elementi che rispettano determinate regole
-    //   (courses) => {
-    //     this.beginnersCourses = courses.filter(
-    //       (course) => course.category === "BEGINNER"
-    //     );
-    //     this.advancedCourses = courses.filter(
-    //       (course) => course.category === "ADVANCED"
-    //     );
-    //   },
-    //   noop,
-    //   () => console.log("completed")
-    // );
-
-    // definisco gli observables tramite map operator rxjs direttamente da courses$ che restituiva un array di course e su questo applico il .filter() method
+    // questi 2 observables sono sottoscritti entrambi nel template
+    // pur essendo derivati entrambi dallo stesso observable, al momento della sottoscrizione si avranno 2 chimate http verso il backend
+    // questo avviene perchè ogni sottoscrizione crea un nuovo stream di values
+    // per evitare chiamate http multiple dobbiamo fare in modo che tutte le subscriptions condividano lo stesso stream of value, senza crearne un altro
+    // si fa questo utilizzando l'operatore rxjs shareReplay(), sull'observable courses$
     this.beginnersCourses$ = courses$.pipe(
       map((courses) =>
         courses.filter((course) => course.category === "BEGINNER")

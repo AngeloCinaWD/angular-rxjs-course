@@ -40,6 +40,10 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [function rxjs map](https://rxjs.dev/api/index/function/map)
 
+## [operator rxjs shareReplay](https://rxjs.dev/api/operators/shareReplay)
+
+## [operator rxjs tap](https://rxjs.dev/api/operators/tap)
+
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
 
 ## [Response body js](https://developer.mozilla.org/en-US/docs/Web/API/Response/body)

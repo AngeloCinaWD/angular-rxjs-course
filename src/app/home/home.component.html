@@ -3,14 +3,11 @@
 
   <mat-tab-group>
     <mat-tab label="Beginners">
-      <!-- <courses-card-list [courses]="beginnersCourses"> </courses-card-list> -->
-      <!-- LA SOTTOSCRIZIONE ALL'OBSERVABLE LA FACCIO DIRETTAMENTE NEL TEMPLATE TRAMITE IL PIPE DI ANGULA ASYNC -->
       <courses-card-list [courses]="beginnersCourses$ | async">
       </courses-card-list>
     </mat-tab>
 
     <mat-tab label="Advanced">
-      <!-- <courses-card-list [courses]="advancedCourses"></courses-card-list> -->
       <courses-card-list
         [courses]="advancedCourses$ | async"
       ></courses-card-list>
