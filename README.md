@@ -48,6 +48,8 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [function rxjs concat](https://rxjs.dev/api/index/function/concat)
 
+## [operator rxjs filter](https://rxjs.dev/api/operators/filter)
+
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
 
 ## [Response body js](https://developer.mozilla.org/en-US/docs/Web/API/Response/body)
