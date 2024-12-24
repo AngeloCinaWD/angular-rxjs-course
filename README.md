@@ -36,6 +36,8 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [function rxjs noop](https://rxjs.dev/api/index/function/noop)
 
+## [function rxjs pipe](https://rxjs.dev/api/index/function/pipe)
+
 ## [function rxjs map](https://rxjs.dev/api/index/function/map)
 
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
@@ -45,3 +47,5 @@ To run the frontend part of our code, we will use the Angular CLI:
 ## [.then() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then)
 
 ## [.catch() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch)
+
+## [Object.values() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)
