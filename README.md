@@ -49,3 +49,5 @@ To run the frontend part of our code, we will use the Angular CLI:
 ## [.catch() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch)
 
 ## [Object.values() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)
+
+## [.filter() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter#syntax)
