@@ -27,3 +27,9 @@ To run the frontend part of our code, we will use the Angular CLI:
     npm start
 
 ## [RxJs Library](https://rxjs.dev/)
+
+## [function rxjs interval](https://rxjs.dev/api/index/function/interval)
+
+## [function rxjs timer](https://rxjs.dev/api/index/function/timer)
+
+## [function rxjs fromEvent](https://rxjs.dev/api/index/function/fromEvent)
