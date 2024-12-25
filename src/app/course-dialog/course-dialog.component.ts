@@ -28,7 +28,6 @@ import { fromPromise } from "rxjs/internal-compatibility";
   standalone: false,
 })
 export class CourseDialogComponent implements OnInit, AfterViewInit {
-  // una proprietà di tipo FormGroup ha a disposizione alcuni metodi e prorietà, tra le quali valueChanges che è un Observable che tiene in memoria tutte le proprietà del form ed i loro valori ed emette un oggetto con questi dati ogni volta che qualcosa cambia
   form: FormGroup;
   course: Course;
 
@@ -51,35 +50,48 @@ export class CourseDialogComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // QUESTO METODO IMPLEMENTATO MI PERMETTE DI GESTIRE CHIAMATE HTTP ESEGUITE IN SEQUENZA, NON IN PARALLELO
   ngOnInit() {
-    // implementazione di un sistema di autosave data dele form verso il BE in background, ogni volta che l'utente modifica i dati nel form
-    // utile ad esempio se l'utente lascia la pagina senza salvare quello che ha editato
-    // il filter operator rxjs controlla che un value emesso rispetti o no una condizione se true lo emette se false non lo emette
-    // utilizzando il booleano restituito dal controllo della validtà del form io psso filtrare i dati da mandare al backend ed essere sicuro che i dati vengano inviati e salvati nel BE solo se validi
-    // se la compilazione del form è corretta la condizione nel filter è TRUE (this.form.valid è TRUE) e i valori vengono emessi ed arrivano al subscribe, se invece qualcosa non è compilato per bene e this.form.valid è FALSE non viene emesso niente
     this.form.valueChanges
-      .pipe(filter(() => this.form.valid))
+      .pipe(
+        filter(() => this.form.valid),
+        // inseriamo qui il concatMap e gli diciamo di ottenere un observable da ogni changes ricevuto e concatenarlo a quello precedente
+        // il subscribe, quindi l'esecuzione di ogni observable, viene fatta dal concatMap per ogni singolo observable
+        concatMap((changes) => this.saveCourse(changes))
+      )
       .subscribe((changes) => {
-        console.log(changes);
-        console.log(this.form.valid);
-        // implementazione della chiamata al BE per salvare i dati senza utilizzo degli observables
-        // il fetch restituisce una promise che va gestita tramite metodi .then() o .catch() per gli errori
-        // gestiamo la promise come se fosse un observable utilizzando la function rxjs from() che crea un observable da una promise, o da un array ed altro
-        // salviamo tutto in una const, quindi senza il subscribe a questa non avverrà nulla, ho solo creato il blueprint per il flusso dei valori
-        const saveCourse$ = from(
-          fetch(`/api/courses/${this.course.id}`, {
-            method: "PUT",
-            body: JSON.stringify(changes),
-            headers: {
-              "content-type": "application/json",
-            },
-          })
-        );
-        // per effettuare la chiamata http e salvare i dati dovrei fare il subscribe, in questo modo però avrei dei subscribe annidati e questo è qualcosa da evitare con rxjs, è un anti-pattern
-        // inoltre in questo modo si ha un altro problema: ogni volta che cambio qualcosa in un campo del form, ad esempio ogni volta che digito un carattere nella descrizione, parte una chiamata verso il BE, ne partono tante tutte insieme e non si sa quale viene completata o in che oridne, questo porterebbe a non avere la certezza che il valore salvato sia l'ultimo valido
+        // creo un metodo per ottenere un oservable
+        // const saveCourse$ = from(
+        //   fetch(`/api/courses/${this.course.id}`, {
+        //     method: "PUT",
+        //     body: JSON.stringify(changes),
+        //     headers: {
+        //       "content-type": "application/json",
+        //     },
+        //   })
+        // );
         // dobbiamo fare quindi in modo che le chiamate vengano effettuate una dopo l'altra ma solo quando quella prima è stata completata
-        saveCourse$.subscribe();
+        // utilizziamo la concatenazione degli observables per questo tipo di operazioni
+        // l'obiettivo è quello di ottenere un nuovo observable ogni volta che arriva un change dei values del form e concatenarli tutti, in modo che un oservable venga eseguito e completato solo quando quello prima è stato eseguito e completato
+        // questa dinamica di trasformare un observable in un altro e concateenarlo viene eseguita egregiamente dall'operator rxjs concatMap()
+        // concatMap esegue la sua callback su ogni valore emesso da un observable e restituisce un observable nuovo, una volta eseguita la callback fa la stessa cosa sul secondo value ed il nuovo observable derivato lo concatena a quello precedente. Solo quando l'observable precedente ha completato la sua vita viene emesso il secondo observable derivato.
+        // quindi questo non va messo qui ma nel concatMap nel pipe
+        // const saveCourse$ = this.saveCourse(changes);
+        // saveCourse$.subscribe();
       });
+  }
+
+  // metodo che restituisce un observable per una chiamata http
+  saveCourse(changes) {
+    return from(
+      fetch(`/api/courses/${this.course.id}`, {
+        method: "PUT",
+        body: JSON.stringify(changes),
+        headers: {
+          "content-type": "application/json",
+        },
+      })
+    );
   }
 
   ngAfterViewInit() {}
