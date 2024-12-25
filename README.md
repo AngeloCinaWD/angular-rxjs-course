@@ -50,6 +50,8 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [operator rxjs filter](https://rxjs.dev/api/operators/filter)
 
+## [function rxjs from](https://rxjs.dev/api/index/function/from)
+
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
 
 ## [Response body js](https://developer.mozilla.org/en-US/docs/Web/API/Response/body)
