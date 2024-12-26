@@ -30,6 +30,8 @@ export class CourseDialogComponent implements OnInit, AfterViewInit {
   form: FormGroup;
   course: Course;
 
+  // con il decoratore @ViewChild creo una reference ad un elemento html
+  // in questo caso al button save
   @ViewChild("saveButton", { static: true }) saveButton: ElementRef;
 
   @ViewChild("searchInput", { static: true }) searchInput: ElementRef;
@@ -53,13 +55,8 @@ export class CourseDialogComponent implements OnInit, AfterViewInit {
     this.form.valueChanges
       .pipe(
         filter(() => this.form.valid),
-        // per eseguire operazioni asincrone in modo sequenziale abbiamo utilizzato il concatMap, esegue la prima chiamata http ed attende che questa sia completata prima di far partire la seconda
-        // concatMap((changes) => this.saveCourse(changes))
-
-        // per eseguire invece chiamate in parallelo utilizziamo il mergeMap operator rxjs
-        // in questo modo una chiamata http parte senza aspettare che quella prima sia stata completata, non aspetta che un observable si completi per sottoscriversi al secondo observable
-        // l'utilizzo del concatMap è quindi molto importante quando si vogliono eseguire delle operazioni asincrone in modo sequenziale e che quindi venga rispettato un ordine di esecuzione
-        mergeMap((changes) => this.saveCourse(changes))
+        concatMap((changes) => this.saveCourse(changes))
+        // mergeMap((changes) => this.saveCourse(changes))
       )
       .subscribe((changes) => {});
   }
@@ -76,7 +73,23 @@ export class CourseDialogComponent implements OnInit, AfterViewInit {
     );
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    // implementiamo un sistema che ci permetta di creare uno stream di values collegati al click del button save
+    // utilizziamo la funzione fromEvent rxjs e indichiamo come riferimento l'elemento dom nativo del button save
+    // al click di questo button definiamo un observable
+    // per effettuare una chiamata http per salvare i valori del form utilizziamo il pipe ed il concatMap, i valori li prendiamo direttamente dal form
+    fromEvent(this.saveButton.nativeElement, "click").pipe(
+      // l'utilizzo del concatMap in questo caso può non essere corretto perchè se io continuassi a cliccare il button più volte verrebbe inviata una nuova chiamata http verso il BE
+      // ma nel caso del button non serve perchè non ci sarebbero cambiamenti nel form, ma verrebbero inviati sempre gli stessi dati
+      // concatMap(() => this.saveCourse(this.form.value))
+
+      // invece del concatMap è più giusto utilizzare l'operator rxjs exhaustMap
+      // questo ignora nuovi valori emessi mentre l'ultimo valore emesso non è ancora stato completato
+      // in questo modo clicando più volte sul button, se non è stata completata la prima chamata http tutti i click durante il suo completamento verranno ignorati
+      // solo il click che verrà effettuato dopo che la chiamata è stata completata verrà preso di nuovo in considerazione
+      exhaustMap(() => this.saveCourse(this.form.value))
+    );
+  }
 
   close() {
     this.dialogRef.close();
