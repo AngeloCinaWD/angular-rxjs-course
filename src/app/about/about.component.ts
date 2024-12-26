@@ -14,7 +14,7 @@ export class AboutComponent implements OnInit {
   // l'operator merge di rxjs è utile quando si vuole prendere più observables e sottoscriversi ad ognuno di essi
   // è ideale per eseguire operazioni asincrone in parallelo
   // abbiamo ad esempio 2 observable che emettono valori, il merge prende il primo valore emesso e lo mette in un nuovo observable, viene emesso un secondo valore e viene aggiunto al nuovo observable e così via, indipendentemente da quale observable di partenza viene emesso
-  // il risultato sarà un nuovo observable contenente tutti i valori emessi dagli observables mergiati, in ordine di emissione
+  // il risultato sarà un nuovo observable contenente tutti i valori emessi dagli observables mergiati, in ordine di emissione, non aspetta che il primo observable si completi per aggiungere i valori del secondo observable, le sottoscrizioni avvengo contemporaneamente ai 2 observable
   // questo observable si completerà solo quando tutti gli observables sorgente si sono completati
   ngOnInit() {
     // creiamo ad esempio 2 blueprint per 2 observable

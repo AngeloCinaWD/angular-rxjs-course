@@ -53,7 +53,13 @@ export class CourseDialogComponent implements OnInit, AfterViewInit {
     this.form.valueChanges
       .pipe(
         filter(() => this.form.valid),
-        concatMap((changes) => this.saveCourse(changes))
+        // per eseguire operazioni asincrone in modo sequenziale abbiamo utilizzato il concatMap, esegue la prima chiamata http ed attende che questa sia completata prima di far partire la seconda
+        // concatMap((changes) => this.saveCourse(changes))
+
+        // per eseguire invece chiamate in parallelo utilizziamo il mergeMap operator rxjs
+        // in questo modo una chiamata http parte senza aspettare che quella prima sia stata completata, non aspetta che un observable si completi per sottoscriversi al secondo observable
+        // l'utilizzo del concatMap è quindi molto importante quando si vogliono eseguire delle operazioni asincrone in modo sequenziale e che quindi venga rispettato un ordine di esecuzione
+        mergeMap((changes) => this.saveCourse(changes))
       )
       .subscribe((changes) => {});
   }
