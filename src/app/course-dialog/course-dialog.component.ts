@@ -19,7 +19,6 @@ import {
   filter,
   mergeMap,
 } from "rxjs/operators";
-import { fromPromise } from "rxjs/internal-compatibility";
 
 @Component({
   selector: "course-dialog",
@@ -50,38 +49,15 @@ export class CourseDialogComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // QUESTO METODO IMPLEMENTATO MI PERMETTE DI GESTIRE CHIAMATE HTTP ESEGUITE IN SEQUENZA, NON IN PARALLELO
   ngOnInit() {
     this.form.valueChanges
       .pipe(
         filter(() => this.form.valid),
-        // inseriamo qui il concatMap e gli diciamo di ottenere un observable da ogni changes ricevuto e concatenarlo a quello precedente
-        // il subscribe, quindi l'esecuzione di ogni observable, viene fatta dal concatMap per ogni singolo observable
         concatMap((changes) => this.saveCourse(changes))
       )
-      .subscribe((changes) => {
-        // creo un metodo per ottenere un oservable
-        // const saveCourse$ = from(
-        //   fetch(`/api/courses/${this.course.id}`, {
-        //     method: "PUT",
-        //     body: JSON.stringify(changes),
-        //     headers: {
-        //       "content-type": "application/json",
-        //     },
-        //   })
-        // );
-        // dobbiamo fare quindi in modo che le chiamate vengano effettuate una dopo l'altra ma solo quando quella prima è stata completata
-        // utilizziamo la concatenazione degli observables per questo tipo di operazioni
-        // l'obiettivo è quello di ottenere un nuovo observable ogni volta che arriva un change dei values del form e concatenarli tutti, in modo che un oservable venga eseguito e completato solo quando quello prima è stato eseguito e completato
-        // questa dinamica di trasformare un observable in un altro e concateenarlo viene eseguita egregiamente dall'operator rxjs concatMap()
-        // concatMap esegue la sua callback su ogni valore emesso da un observable e restituisce un observable nuovo, una volta eseguita la callback fa la stessa cosa sul secondo value ed il nuovo observable derivato lo concatena a quello precedente. Solo quando l'observable precedente ha completato la sua vita viene emesso il secondo observable derivato.
-        // quindi questo non va messo qui ma nel concatMap nel pipe
-        // const saveCourse$ = this.saveCourse(changes);
-        // saveCourse$.subscribe();
-      });
+      .subscribe((changes) => {});
   }
 
-  // metodo che restituisce un observable per una chiamata http
   saveCourse(changes) {
     return from(
       fetch(`/api/courses/${this.course.id}`, {
