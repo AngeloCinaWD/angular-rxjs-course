@@ -60,6 +60,10 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [operator rxjs exhaustMap](https://rxjs.dev/api/operators/exhaustMap)
 
+## [operator rxjs debounceTime](https://rxjs.dev/api/operators/debounceTime)
+
+## [operator rxjs distinctUntilChanged](https://rxjs.dev/api/operators/distinctUntilChanged)
+
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
 
 ## [Response body js](https://developer.mozilla.org/en-US/docs/Web/API/Response/body)
