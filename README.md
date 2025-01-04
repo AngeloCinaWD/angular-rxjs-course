@@ -64,6 +64,8 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [operator rxjs distinctUntilChanged](https://rxjs.dev/api/operators/distinctUntilChanged)
 
+## [operator rxjs switchMap](https://rxjs.dev/api/operators/switchMap)
+
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
 
 ## [Response body js](https://developer.mozilla.org/en-US/docs/Web/API/Response/body)
