@@ -72,6 +72,10 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [operator rxjs finalize](https://rxjs.dev/api/operators/finalize)
 
+## [operator rxjs retryWhen](https://rxjs.dev/api/operators/retryWhen)
+
+## [operator rxjs delayWhen](https://rxjs.dev/api/operators/delayWhen)
+
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
 
 ## [Response body js](https://developer.mozilla.org/en-US/docs/Web/API/Response/body)
@@ -83,3 +87,5 @@ To run the frontend part of our code, we will use the Angular CLI:
 ## [Object.values() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)
 
 ## [.filter() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter#syntax)
+
+## [Math.random() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random)
