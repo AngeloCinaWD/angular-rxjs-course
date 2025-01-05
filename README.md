@@ -66,6 +66,8 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [operator rxjs switchMap](https://rxjs.dev/api/operators/switchMap)
 
+## [operator rxjs catchError](https://rxjs.dev/api/operators/catchError)
+
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
 
 ## [Response body js](https://developer.mozilla.org/en-US/docs/Web/API/Response/body)

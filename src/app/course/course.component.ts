@@ -66,7 +66,7 @@ export class CourseComponent implements OnInit, AfterViewInit {
     return createHttpObservable(
       `/api/lessons?courseId=${this.courseId}&pageSize=100&filter=${search}`
     ).pipe(
-      tap(console.log),
+      // tap(console.log),
       map((response) => response["payload"])
     );
   }
