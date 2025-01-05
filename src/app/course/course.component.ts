@@ -54,14 +54,14 @@ export class CourseComponent implements OnInit, AfterViewInit {
       startWith(""),
       // debouncing emette un valore solo quando questo è considerato stabile all'interno di un certo range di tempo
       // quindi se qualcunoscrive molto velocemente nessun valore sarà emesso
-      // debounceTime(400),
+      debounceTime(400),
       // throttling riduce l'emissione di valori secondo un tempo stabilito
       // il valore viene emesso secondo l'emissione di un valore di un observable secondario, ad esempio un flusso stabilito con un interval()
       // il throttle garantisce di avere un valore di output, ma non che il valore sia l'ultimo immesso, infatti se immetto un valore e poi ne immetto altri dentro l'intervallo di tempo e non ne immetto pù dopo, avrò solo il primo valore
       // se pèer esempio scrivessi h e poi ello, avrei solo h come valore di ricerca
       // throttle(() => interval(500)),
       // l'operatore rxjs throttleTime() è come il throttle ma crea un inreval internamente, devo solo indicare il tempo
-      throttleTime(500),
+      // throttleTime(500),
       distinctUntilChanged(),
       switchMap((search) => this.loadLessons(search))
     );

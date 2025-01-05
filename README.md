@@ -95,3 +95,5 @@ To run the frontend part of our code, we will use the Angular CLI:
 ## [.filter() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter#syntax)
 
 ## [Math.random() js](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random)
+
+## [Higher Order Fucntions js](https://www.freecodecamp.org/news/higher-order-functions-in-javascript-explained/)
