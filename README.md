@@ -50,6 +50,8 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [operator rxjs filter](https://rxjs.dev/api/operators/filter)
 
+## [operator rxjs throttle](https://rxjs.dev/api/index/function/throttle)
+
 ## [function rxjs from](https://rxjs.dev/api/index/function/from)
 
 ## [function rxjs throwError](https://rxjs.dev/api/index/function/throwError)
@@ -77,6 +79,8 @@ To run the frontend part of our code, we will use the Angular CLI:
 ## [operator rxjs delayWhen](https://rxjs.dev/api/operators/delayWhen)
 
 ## [operator rxjs startWith](https://rxjs.dev/api/operators/startWith)
+
+## [operator rxjs throttleTime](https://rxjs.dev/api/operators/throttleTime)
 
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
 

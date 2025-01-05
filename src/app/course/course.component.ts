@@ -19,8 +19,10 @@ import {
   withLatestFrom,
   concatAll,
   shareReplay,
+  throttle,
+  throttleTime,
 } from "rxjs/operators";
-import { merge, fromEvent, Observable, concat } from "rxjs";
+import { merge, fromEvent, Observable, concat, interval } from "rxjs";
 import { Lesson } from "../model/lesson";
 import { createHttpObservable } from "../common/util";
 
@@ -47,43 +49,24 @@ export class CourseComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // const searchLessons$ = fromEvent<any>(
-    //   this.input.nativeElement,
-    //   "keyup"
-    // ).pipe(
-    //   map((event) => event.target.value),
-    //   debounceTime(400),
-    //   distinctUntilChanged(),
-    //   switchMap((search) => this.loadLessons(search))
-    // );
-
-    // const initialLessons$ = this.loadLessons();
-
-    // this.lessons$ = concat(initialLessons$, searchLessons$);
-
-    // tramite il concat() concateniamo 2 observables, le lezioni del coro sono all'inizio tutte e poi sono quelle secondo il filtro di ricerca
-    // possiamo utilizzare l'operatore rxjs startWith() per eliminare la logica dei 2 observables
-    // questo operatore ha come obiettivo quello di fornire un valore iniziale ad un observable
-    // nella logica scritta prima l'observable searchLessons$ è un array di lezioni filtrate secondo un valore immesso nell'input, tramite startWith indichiamo che il primo valore che va utilizzato per la ricerca sia stringa vuota
-    // in questo modo avremo tutte le lezioni all'inizio senza filtraggio
-    // anche se non viene inserito niente verrà effettuata la chiamata http con valore di filtraggio ''
     this.lessons$ = fromEvent<any>(this.input.nativeElement, "keyup").pipe(
       map((event) => event.target.value),
       startWith(""),
-      debounceTime(400),
+      // debouncing emette un valore solo quando questo è considerato stabile all'interno di un certo range di tempo
+      // quindi se qualcunoscrive molto velocemente nessun valore sarà emesso
+      // debounceTime(400),
+      // throttling riduce l'emissione di valori secondo un tempo stabilito
+      // il valore viene emesso secondo l'emissione di un valore di un observable secondario, ad esempio un flusso stabilito con un interval()
+      // il throttle garantisce di avere un valore di output, ma non che il valore sia l'ultimo immesso, infatti se immetto un valore e poi ne immetto altri dentro l'intervallo di tempo e non ne immetto pù dopo, avrò solo il primo valore
+      // se pèer esempio scrivessi h e poi ello, avrei solo h come valore di ricerca
+      // throttle(() => interval(500)),
+      // l'operatore rxjs throttleTime() è come il throttle ma crea un inreval internamente, devo solo indicare il tempo
+      throttleTime(500),
       distinctUntilChanged(),
       switchMap((search) => this.loadLessons(search))
     );
   }
 
-  // loadLessons(search: string = ""): Observable<Lesson[]> {
-  //   return createHttpObservable(
-  //     `/api/lessons?courseId=${this.courseId}&pageSize=100&filter=${search}`
-  //   ).pipe(
-  //     // tap(console.log),
-  //     map((response) => response["payload"])
-  //   );
-  // }
   loadLessons(search: string): Observable<Lesson[]> {
     return createHttpObservable(
       `/api/lessons?courseId=${this.courseId}&pageSize=100&filter=${search}`
