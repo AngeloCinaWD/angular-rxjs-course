@@ -25,6 +25,7 @@ import {
 import { merge, fromEvent, Observable, concat, interval } from "rxjs";
 import { Lesson } from "../model/lesson";
 import { createHttpObservable } from "../common/util";
+import { debug, RxJsLoggingLevel } from "../common/debug";
 
 @Component({
   selector: "course",
@@ -45,13 +46,17 @@ export class CourseComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.courseId = this.route.snapshot.params["id"];
 
-    this.course$ = createHttpObservable(`/api/courses/${this.courseId}`);
+    this.course$ = createHttpObservable(`/api/courses/${this.courseId}`).pipe(
+      debug(RxJsLoggingLevel.INFO, "course value")
+    );
   }
 
   ngAfterViewInit() {
     this.lessons$ = fromEvent<any>(this.input.nativeElement, "keyup").pipe(
       map((event) => event.target.value),
+      debug(RxJsLoggingLevel.INFO, "map value"),
       startWith(""),
+      debug(RxJsLoggingLevel.ERROR, "startwith value"),
       // debouncing emette un valore solo quando questo è considerato stabile all'interno di un certo range di tempo
       // quindi se qualcunoscrive molto velocemente nessun valore sarà emesso
       debounceTime(400),
@@ -72,7 +77,8 @@ export class CourseComponent implements OnInit, AfterViewInit {
       `/api/lessons?courseId=${this.courseId}&pageSize=100&filter=${search}`
     ).pipe(
       // tap(console.log),
-      map((response) => response["payload"])
+      map((response) => response["payload"]),
+      debug(RxJsLoggingLevel.INFO, "lessons value")
     );
   }
 }
