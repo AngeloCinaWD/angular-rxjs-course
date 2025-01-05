@@ -10,26 +10,26 @@ export function createHttpObservable(url: string) {
 
     // la proprietà viene passata in un oggetto di configurazione come secondo parametro del metodo fetch (dove gestisco il method, il body, l'headers etc))
     fetch(url, { signal })
-      .then((response) => response.json())
+      .then((response) => {
+        // se c'è una response dobbiamo gestire l'errore qui
+        // utilizziamo la property ok
+        // se questa è true ritorniamo la response
+        if (response.ok) {
+          return response.json();
+        }
+        // altrimenti utilizziamo l'observer.error
+        else {
+          observer.error(`Request failed with status code: ${response.status}`);
+        }
+      })
       .then((body) => {
         observer.next(body);
         observer.complete();
       })
+      // questo catch funziona solo se si ha un fatal error, come assenza di rete o errore di dns, qualcosa che non può essere gestito dal browser
       .catch((error) => {
         observer.error(error);
       });
-
-    // per far funzionare il catchError come spiegato nella lezione 26 va forzata l'emissione dell'observable dall'observer.error
-    // una response (pur con stato 500) viene ritornata e quindi si ha un body, non si ha un http error che può essere catchato
-    // fetch(url, { signal })
-    //   .then((response) => response.json())
-    //   // .then((body) => {
-    //   //   observer.next(body);
-    //   //   observer.complete();
-    //   // })
-    //   .then((error) => {
-    //     observer.error(error);
-    //   });
 
     // per interrompere la chiamata http dobbiamo chiamare il metodo .abort() del controller che abbiamo creato
     // per farlo ritorniamo una funzione dall'observable che abbiamo creato qui e che ritorniamo dalla funzione createHttpObservable() che stiamo esportando qui

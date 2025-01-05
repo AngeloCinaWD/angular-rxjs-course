@@ -52,6 +52,8 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [function rxjs from](https://rxjs.dev/api/index/function/from)
 
+## [function rxjs throwError](https://rxjs.dev/api/index/function/throwError)
+
 ## [operator rxjs concatMap](https://rxjs.dev/api/operators/concatMap)
 
 ## [operator rxjs merge](https://rxjs.dev/api/operators/merge)
@@ -67,6 +69,8 @@ To run the frontend part of our code, we will use the Angular CLI:
 ## [operator rxjs switchMap](https://rxjs.dev/api/operators/switchMap)
 
 ## [operator rxjs catchError](https://rxjs.dev/api/operators/catchError)
+
+## [operator rxjs finalize](https://rxjs.dev/api/operators/finalize)
 
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
 
