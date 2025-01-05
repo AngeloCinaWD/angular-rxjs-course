@@ -22,7 +22,7 @@ import {
   throttle,
   throttleTime,
 } from "rxjs/operators";
-import { merge, fromEvent, Observable, concat, interval } from "rxjs";
+import { merge, fromEvent, Observable, concat, interval, forkJoin } from "rxjs";
 import { Lesson } from "../model/lesson";
 import { createHttpObservable } from "../common/util";
 import { debug, RxJsLoggingLevel } from "../common/debug";
@@ -46,9 +46,21 @@ export class CourseComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.courseId = this.route.snapshot.params["id"];
 
-    this.course$ = createHttpObservable(`/api/courses/${this.courseId}`).pipe(
-      debug(RxJsLoggingLevel.INFO, "course value")
-    );
+    // this.course$ = createHttpObservable(`/api/courses/${this.courseId}`).pipe(
+    //   debug(RxJsLoggingLevel.INFO, "course value")
+    // );
+
+    // l'operatore rxjs forkJoin() ci permette di inviare chiamate http in parallelo, allo stesso momento, al BE ed effettuare una qualche logica solo quando tutte sono state completate
+    // creo 2 observables, uno per il corso ed uno per le sue lezioni
+    const course$ = createHttpObservable(`/api/courses/${this.courseId}`);
+
+    const lessons$ = this.loadLessons("");
+
+    // l'operatore forkJoin() ritorna un observable con una tupla che contiene tutti e 2 i valori degli observables passati
+    forkJoin(course$, lessons$).subscribe(([course, lessons]) => {
+      console.log(course);
+      console.log(lessons);
+    });
   }
 
   ngAfterViewInit() {

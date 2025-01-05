@@ -82,6 +82,8 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [operator rxjs throttleTime](https://rxjs.dev/api/operators/throttleTime)
 
+## [operator rxjs forkJoin](https://rxjs.dev/api/index/function/forkJoin)
+
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
 
 ## [Response body js](https://developer.mozilla.org/en-US/docs/Web/API/Response/body)
