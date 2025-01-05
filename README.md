@@ -76,6 +76,8 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [operator rxjs delayWhen](https://rxjs.dev/api/operators/delayWhen)
 
+## [operator rxjs startWith](https://rxjs.dev/api/operators/startWith)
+
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
 
 ## [Response body js](https://developer.mozilla.org/en-US/docs/Web/API/Response/body)
