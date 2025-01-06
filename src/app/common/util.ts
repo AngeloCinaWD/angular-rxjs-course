@@ -1,24 +1,21 @@
 import { Observable } from "rxjs";
 
-// per annullare una chiamata http effettuata tramite fetch() possiamo utilizzare l'object AbortController
 export function createHttpObservable(url: string) {
+  // utilizzando il metodo create() dell'object Observable creiamo un observable andando a definire l'observer
+  // c'è una netta definizione dell'observer, definiamo noi cosa emettere, come completare l'observable e come intervenire in caso di errore
+  //ci sono però situazioni dove non è conveniente creare un observable in questo modo
+  // in questi casi si utilizzano i Subject rxjs
+  // un Subject è allo stesso tempo un observable ed un observer
   return Observable.create((observer) => {
-    // istanzio un AbortController
     const controller = new AbortController();
-    // questo ha una proprietà chiamata signal che emette un valore booleano, se true la chiamata viene interrotta dal browser
+
     const signal = controller.signal;
 
-    // la proprietà viene passata in un oggetto di configurazione come secondo parametro del metodo fetch (dove gestisco il method, il body, l'headers etc))
     fetch(url, { signal })
       .then((response) => {
-        // se c'è una response dobbiamo gestire l'errore qui
-        // utilizziamo la property ok
-        // se questa è true ritorniamo la response
         if (response.ok) {
           return response.json();
-        }
-        // altrimenti utilizziamo l'observer.error
-        else {
+        } else {
           observer.error(`Request failed with status code: ${response.status}`);
         }
       })
@@ -31,10 +28,6 @@ export function createHttpObservable(url: string) {
         observer.error(error);
       });
 
-    // per interrompere la chiamata http dobbiamo chiamare il metodo .abort() del controller che abbiamo creato
-    // per farlo ritorniamo una funzione dall'observable che abbiamo creato qui e che ritorniamo dalla funzione createHttpObservable() che stiamo esportando qui
-    // questa funzione verrà chiamata quando chiamimo il .unsubscribe() sulla subscription a questa funzione
-    // proviamo in about.component.ts
     return () => controller.abort();
   });
 }
