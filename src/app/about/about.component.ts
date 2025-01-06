@@ -1,5 +1,14 @@
 import { Component, OnInit } from "@angular/core";
-import { BehaviorSubject, concat, interval, merge, of, Subject } from "rxjs";
+import {
+  AsyncSubject,
+  BehaviorSubject,
+  concat,
+  interval,
+  merge,
+  of,
+  ReplaySubject,
+  Subject,
+} from "rxjs";
 import { map } from "rxjs/operators";
 import { createHttpObservable } from "../common/util";
 
@@ -84,5 +93,49 @@ export class AboutComponent implements OnInit {
     beha2obs.subscribe((val) =>
       console.log("questa la vedo solo se commento il .complete(): " + val)
     );
+
+    // un AsyncSubject è un subject che ha come comportamento quello di attendere che l'oservable sia completato prima di emettere un altro valore. Il valore emesso sarà l'ultimo di uno streaming di valori di un observable
+    // è importante che ci sia il .complete() perchè altrimenti il subject non sarebbe completato e non riceverei nessun valore dall'observable collegato ad esso
+    const asyncSubject = new AsyncSubject();
+
+    const asyncObservable$ = asyncSubject.asObservable();
+
+    asyncObservable$.subscribe((val) =>
+      console.log("last value emitted: " + val)
+    );
+
+    asyncSubject.next("first value");
+    asyncSubject.next("second value");
+    asyncSubject.next("last value");
+
+    asyncSubject.complete();
+
+    // in caso di una subscription tardiva, effettuata dopo il complete(), riceverei comunque l'ultimo valore emesso dall'AsyncSubject
+    asyncObservable$.subscribe((val) =>
+      console.log("last value emitted: " + val)
+    );
+
+    // se invece avessi bisogno di ricevere tutti i valori emessi dal subject e non solo l'ultimo, posso utilizzare il ReplaySubject
+    // il complete non ha importanza
+    const replaySubject = new ReplaySubject();
+
+    const replayObservable$ = replaySubject.asObservable();
+
+    replayObservable$.subscribe((val) => console.log(val));
+
+    replaySubject.next(101);
+    replaySubject.next(102);
+    replaySubject.next(103);
+
+    // con il complete() qui la subscription tardiva mi vede i valori emessi da 101 a 103
+    // l'emissione del 104 non verrebbe vista da nessuna sottoscrizione
+    replaySubject.complete();
+
+    replayObservable$.subscribe((val) => console.log(val));
+
+    replaySubject.next(104);
+
+    // questa sottoscrizione effettuata dopo l'ultima emissione da parte del subject vedrebbe da 101 a 104
+    replayObservable$.subscribe((val) => console.log(val));
   }
 }

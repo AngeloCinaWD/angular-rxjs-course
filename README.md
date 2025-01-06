@@ -88,6 +88,10 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 ## [class rxjs BehaviorSubject](https://rxjs.dev/api/index/class/BehaviorSubject)
 
+## [class rxjs AsyncSubject](https://rxjs.dev/api/index/class/AsyncSubject)
+
+## [class rxjs ReplaySubject](https://rxjs.dev/api/index/class/ReplaySubject)
+
 ## [Response.json() js](https://developer.mozilla.org/en-US/docs/Web/API/Response/json)
 
 ## [Response body js](https://developer.mozilla.org/en-US/docs/Web/API/Response/body)
